@@ -1,6 +1,7 @@
+/* @flow */
 import { isPlainObject, checkForUndefinedKeys } from './utils';
 
-const createStateTree = initialState => {
+const createStateTree = (initialState: Object) : Object => {
   let currentState = initialState;
   const listeners = [];
 
@@ -8,7 +9,7 @@ const createStateTree = initialState => {
     throw new Error(`Expected initialState to be a plain object.`);
   }
 
-  const setState = nextState => {
+  const setState = (nextState: Object) : ?Object => {
     if (nextState) {
       if (!isPlainObject(nextState)) {
         throw new Error(`Expected nextState to be a plain object.`);
@@ -25,7 +26,7 @@ const createStateTree = initialState => {
     return;
   };
 
-  const render = listener => {
+  const render = (listener: Function) => {
     if (typeof listener !== 'function') {
       throw new Error(`Expected listener to be a function.`);
     }

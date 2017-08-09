@@ -1,4 +1,4 @@
-import createStateTree from '../src/index';
+import createStateTree from '../lib/index';
 global.console = { warn: jest.fn() };
 
 describe('createStateTree', () => {
