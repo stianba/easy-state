@@ -10,6 +10,7 @@ import { isPlainObject, checkForUndefinedKeys } from './utils';
  */
 const createStateTree = initialState => {
   let currentState = initialState;
+  let prevState = initialState;
   const listeners = [];
 
   if (!isPlainObject(initialState)) {
@@ -35,9 +36,13 @@ const createStateTree = initialState => {
     if (nextState) {
       if (isPlainObject(nextState)) {
         checkForUndefinedKeys(currentState, nextState);
+        prevState = currentState;
         currentState = Object.assign({}, initialState, nextState);
       } else if (typeof nextState === 'function') {
         checkForUndefinedKeys(currentState, nextState(currentState));
+        /**
+        * TODO: Save prevState when using setState with callback
+        **/
         currentState = Object.assign({}, initialState, nextState(currentState));
       } else {
         throw new Error(
@@ -50,7 +55,7 @@ const createStateTree = initialState => {
        * is run every time setState is called
        */
 
-      listeners.forEach(listener => listener());
+      listeners.forEach(listener => listener(prevState, nextState));
 
       return nextState;
     }
@@ -73,7 +78,7 @@ const createStateTree = initialState => {
      * setting the initial state.
      */
 
-    listener();
+    listener(prevState, currentState);
 
     /**
      * make the listeners available

@@ -60,8 +60,10 @@ class TodoApp {
   }
 
   render() {
-    this.store.subscribe(() => {
-      this.$todosList.html(this.todo(this.store.getState().todos));
+    this.store.subscribe((prev, next) => {
+      if (prev.todos !== next.todos) {
+        this.$todosList.html(this.todo(this.store.getState().todos));
+      }
     });
   }
 }
